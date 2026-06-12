@@ -222,14 +222,16 @@ const App = () => {
         </div>
 
         <div className="App__layout">
-          <Sidebar
-            filter={filter}
-            onFilterChange={setFilter}
-            favorites={favorites}
-            watched={watched}
-            movieIndex={sidebarMovieIndex}
-            onMovieClick={setSelectedMovieId}
-          />
+          <div className="App__sidebar">
+            <Sidebar
+              filter={filter}
+              onFilterChange={setFilter}
+              favorites={favorites}
+              watched={watched}
+              movieIndex={sidebarMovieIndex}
+              onMovieClick={setSelectedMovieId}
+            />
+          </div>
 
           <div className="App__content">
             <div className="App__heading-row">

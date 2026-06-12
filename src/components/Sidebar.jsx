@@ -57,7 +57,7 @@ const Sidebar = ({
         </ul>
       </section>
 
-      <section className="sidebar__section">
+      <section className="sidebar__section sidebar__section--lists">
         <h3 className="sidebar__heading">Favorites</h3>
         {favoriteMovies.length === 0 ? (
           <p className="sidebar__empty">Tap the heart on any card.</p>
@@ -78,7 +78,7 @@ const Sidebar = ({
         )}
       </section>
 
-      <section className="sidebar__section">
+      <section className="sidebar__section sidebar__section--lists">
         <h3 className="sidebar__heading">Watched</h3>
         {watchedMovies.length === 0 ? (
           <p className="sidebar__empty">Mark movies you have seen.</p>

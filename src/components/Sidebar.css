@@ -7,9 +7,9 @@
   flex-direction: column;
   gap: var(--space-5);
   position: sticky;
-  top: calc(var(--space-5) + 60px);
+  top: calc(var(--header-height) + var(--space-3));
   align-self: flex-start;
-  max-height: calc(100vh - var(--space-7));
+  max-height: calc(100vh - var(--header-height) - var(--space-5));
   overflow-y: auto;
 }
 
@@ -135,5 +135,24 @@
   .sidebar {
     position: static;
     max-height: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+    align-items: center;
+    padding: var(--space-3);
+  }
+  .sidebar__section {
+    flex: 0 0 auto;
+  }
+  .sidebar__section--lists {
+    display: none;
+  }
+  .sidebar__heading {
+    display: none;
+  }
+  .sidebar__filter-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-2);
   }
 }

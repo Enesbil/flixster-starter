@@ -37,6 +37,10 @@
   min-width: 0;
 }
 
+.App__sidebar {
+  min-width: 0;
+}
+
 .App__heading-row {
   display: flex;
   align-items: baseline;
@@ -76,6 +80,12 @@
 @media (max-width: 900px) {
   .App__layout {
     grid-template-columns: 1fr;
+  }
+  .App__sidebar {
+    order: 2;
+  }
+  .App__content {
+    order: 1;
   }
 }
 
