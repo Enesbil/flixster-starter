@@ -154,10 +154,6 @@ const App = () => {
     }
   }
 
-  const handleHomeClick = () => {
-    handleClearSearch()
-  }
-
   const handleLoadMore = () => {
     if (isLoading || isLoadingMore) return
     if (page >= totalPages) return
@@ -169,7 +165,7 @@ const App = () => {
     })
   }
 
-  const sidebarMovieIndex = seenMovies
+  const closeModal = useCallback(() => setSelectedMovieId(null), [])
 
   const filteredMovies = useMemo(() => {
     if (filter === 'favorites') return movies.filter((m) => favorites.has(m.id))
@@ -209,7 +205,7 @@ const App = () => {
     <div className="App">
       <a className="skip-link" href="#main">Skip to content</a>
       <h1 className="sr-only">Flixster</h1>
-      <Header onHomeClick={handleHomeClick} />
+      <Header onHomeClick={handleClearSearch} />
       <main id="main" className="App__main" tabIndex={-1}>
         <div className="App__controls">
           <SearchBar
@@ -228,7 +224,7 @@ const App = () => {
               onFilterChange={setFilter}
               favorites={favorites}
               watched={watched}
-              movieIndex={sidebarMovieIndex}
+              movieIndex={seenMovies}
               onMovieClick={setSelectedMovieId}
             />
           </div>
@@ -240,7 +236,7 @@ const App = () => {
                 <button
                   type="button"
                   className="App__pill-button"
-                  onClick={handleHomeClick}
+                  onClick={handleClearSearch}
                 >
                   Back to now playing
                 </button>
@@ -268,8 +264,9 @@ const App = () => {
 
       {selectedMovieId !== null && (
         <MovieModal
+          key={selectedMovieId}
           movieId={selectedMovieId}
-          onClose={() => setSelectedMovieId(null)}
+          onClose={closeModal}
         />
       )}
     </div>

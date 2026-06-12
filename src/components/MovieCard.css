@@ -140,7 +140,7 @@
 
 .movie-card__action.is-active-watched {
   background: var(--success);
-  color: #042f1a;
+  color: #082f49;
   border-color: transparent;
   opacity: 1;
 }

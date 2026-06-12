@@ -1,4 +1,5 @@
-import { POSTER_BASE } from '../api/tmdb'
+import { memo } from 'react'
+import { POSTER_CARD_BASE } from '../api/tmdb'
 import { HeartIcon, EyeIcon, StarIcon, CheckIcon } from './Icons'
 import './MovieCard.css'
 
@@ -23,7 +24,7 @@ const MovieCard = ({
   onToggleWatched,
 }) => {
   const posterSrc = movie.poster_path
-    ? `${POSTER_BASE}${movie.poster_path}`
+    ? `${POSTER_CARD_BASE}${movie.poster_path}`
     : FALLBACK_POSTER
 
   const voteDisplay =
@@ -124,4 +125,5 @@ const MovieCard = ({
   )
 }
 
-export default MovieCard
+const MemoMovieCard = memo(MovieCard)
+export default MemoMovieCard

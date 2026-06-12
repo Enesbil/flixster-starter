@@ -20,9 +20,10 @@ dist-ssr
 # Local notes containing secrets
 api_info.md
 
-# Local planning/assignment docs (not for sharing)
+# Local copy of the assignment, not for sharing
 assignment_instructions.md
-planning.md
+
+# Local-only deployment notes
 DEPLOY.md
 
 # Local-only skill installation

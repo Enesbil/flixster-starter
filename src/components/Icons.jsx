@@ -86,12 +86,6 @@ export const CalendarIcon = (props) => (
   </svg>
 )
 
-export const ArrowLeftIcon = (props) => (
-  <svg {...baseProps} {...props}>
-    <path d="M19 12H5M12 19l-7-7 7-7" />
-  </svg>
-)
-
 export const ChevronDownIcon = (props) => (
   <svg {...baseProps} {...props}>
     <path d="m6 9 6 6 6-6" />

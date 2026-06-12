@@ -3,6 +3,7 @@ const READ_TOKEN = import.meta.env.VITE_API_READ_ACCESS_TOKEN
 const API_KEY = import.meta.env.VITE_API_KEY
 
 export const POSTER_BASE = 'https://image.tmdb.org/t/p/w500'
+export const POSTER_CARD_BASE = 'https://image.tmdb.org/t/p/w342'
 export const BACKDROP_BASE = 'https://image.tmdb.org/t/p/w1280'
 
 const buildHeaders = () => {

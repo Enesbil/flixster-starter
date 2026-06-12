@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-
-const insightCache = new Map()
 import {
   fetchMovieDetails,
   BACKDROP_BASE,
   POSTER_BASE,
   findYouTubeTrailerKey,
 } from '../api/tmdb'
-import { getMovieInsight } from '../api/openrouter'
+import { getMovieInsight, AI_FALLBACK_MESSAGE } from '../api/openrouter'
 import {
   CloseIcon,
   CalendarIcon,
@@ -16,6 +14,8 @@ import {
   SparklesIcon,
 } from './Icons'
 import './MovieModal.css'
+
+const insightCache = new Map()
 
 const formatRuntime = (minutes) => {
   if (!minutes || typeof minutes !== 'number') return null
@@ -55,6 +55,8 @@ const MovieModal = ({ movieId, onClose }) => {
 
   const modalRef = useRef(null)
   const previouslyFocused = useRef(null)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
 
   useEffect(() => {
     let cancelled = false
@@ -81,9 +83,14 @@ const MovieModal = ({ movieId, onClose }) => {
     }
   }, [movieId])
 
+  const detailsId = details?.id
+  const detailsTitle = details?.title
+  const detailsGenres = details?.genres
+  const detailsOverview = details?.overview
+
   useEffect(() => {
-    if (!details) return
-    const cached = insightCache.get(details.id)
+    if (!detailsId) return
+    const cached = insightCache.get(detailsId)
     if (cached) {
       setAiInsight(cached)
       setLoadingInsight(false)
@@ -93,13 +100,13 @@ const MovieModal = ({ movieId, onClose }) => {
     setLoadingInsight(true)
     setAiInsight(null)
     getMovieInsight({
-      title: details.title,
-      genres: (details.genres || []).map((g) => g.name).join(', '),
-      overview: details.overview,
+      title: detailsTitle,
+      genres: (detailsGenres || []).map((g) => g.name).join(', '),
+      overview: detailsOverview,
     })
       .then((text) => {
         if (cancelled) return
-        insightCache.set(details.id, text)
+        if (text !== AI_FALLBACK_MESSAGE) insightCache.set(detailsId, text)
         setAiInsight(text)
       })
       .finally(() => {
@@ -109,7 +116,7 @@ const MovieModal = ({ movieId, onClose }) => {
     return () => {
       cancelled = true
     }
-  }, [details])
+  }, [detailsId, detailsTitle, detailsGenres, detailsOverview])
 
   useEffect(() => {
     previouslyFocused.current = document.activeElement
@@ -127,7 +134,7 @@ const MovieModal = ({ movieId, onClose }) => {
     const handleKey = (event) => {
       if (event.key === 'Escape') {
         event.preventDefault()
-        onClose()
+        onCloseRef.current()
         return
       }
       if (event.key !== 'Tab') return
@@ -156,7 +163,7 @@ const MovieModal = ({ movieId, onClose }) => {
         prev.focus()
       }
     }
-  }, [onClose])
+  }, [])
 
   const handleBackdropClick = (event) => {
     if (event.target === event.currentTarget) onClose()
@@ -169,6 +176,8 @@ const MovieModal = ({ movieId, onClose }) => {
       : null
 
   const trailerKey = details ? findYouTubeTrailerKey(details.videos) : null
+  const releaseDate = details ? formatReleaseDate(details.release_date) : null
+  const runtime = details ? formatRuntime(details.runtime) : null
 
   return (
     <div
@@ -226,16 +235,16 @@ const MovieModal = ({ movieId, onClose }) => {
                 <p className="movie-modal__tagline">{details.tagline}</p>
               )}
               <ul className="movie-modal__meta">
-                {formatReleaseDate(details.release_date) && (
+                {releaseDate && (
                   <li>
                     <CalendarIcon width={14} height={14} />
-                    <span>{formatReleaseDate(details.release_date)}</span>
+                    <span>{releaseDate}</span>
                   </li>
                 )}
-                {formatRuntime(details.runtime) && (
+                {runtime && (
                   <li>
                     <ClockIcon width={14} height={14} />
-                    <span>{formatRuntime(details.runtime)}</span>
+                    <span>{runtime}</span>
                   </li>
                 )}
                 {typeof details.vote_average === 'number' && (
