@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   fetchMovieDetails,
   BACKDROP_BASE,
@@ -6,6 +6,13 @@ import {
   findYouTubeTrailerKey,
 } from '../api/tmdb'
 import { getMovieInsight } from '../api/openrouter'
+import {
+  CloseIcon,
+  CalendarIcon,
+  ClockIcon,
+  StarIcon,
+  SparklesIcon,
+} from './Icons'
 import './MovieModal.css'
 
 const formatRuntime = (minutes) => {
@@ -27,12 +34,25 @@ const formatReleaseDate = (raw) => {
   })
 }
 
+const FOCUSABLE = [
+  'a[href]',
+  'button:not([disabled])',
+  'textarea:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'iframe',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',')
+
 const MovieModal = ({ movieId, onClose }) => {
   const [details, setDetails] = useState(null)
   const [loadingDetails, setLoadingDetails] = useState(false)
   const [error, setError] = useState(null)
   const [aiInsight, setAiInsight] = useState(null)
   const [loadingInsight, setLoadingInsight] = useState(false)
+
+  const modalRef = useRef(null)
+  const previouslyFocused = useRef(null)
 
   useEffect(() => {
     let cancelled = false
@@ -83,15 +103,48 @@ const MovieModal = ({ movieId, onClose }) => {
   }, [details])
 
   useEffect(() => {
-    const handleKey = (event) => {
-      if (event.key === 'Escape') onClose()
-    }
-    window.addEventListener('keydown', handleKey)
+    previouslyFocused.current = document.activeElement
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+
+    const focusFirst = () => {
+      const root = modalRef.current
+      if (!root) return
+      const first = root.querySelector(FOCUSABLE)
+      if (first instanceof HTMLElement) first.focus()
+    }
+    focusFirst()
+
+    const handleKey = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        onClose()
+        return
+      }
+      if (event.key !== 'Tab') return
+      const root = modalRef.current
+      if (!root) return
+      const focusable = Array.from(
+        root.querySelectorAll(FOCUSABLE)
+      ).filter((el) => el instanceof HTMLElement && !el.hasAttribute('disabled'))
+      if (focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+    window.addEventListener('keydown', handleKey)
     return () => {
       window.removeEventListener('keydown', handleKey)
       document.body.style.overflow = previousOverflow
+      if (previouslyFocused.current instanceof HTMLElement) {
+        previouslyFocused.current.focus()
+      }
     }
   }, [onClose])
 
@@ -115,25 +168,30 @@ const MovieModal = ({ movieId, onClose }) => {
       aria-labelledby="movie-modal-title"
       onClick={handleBackdropClick}
     >
-      <div className="movie-modal">
+      <div className="movie-modal" ref={modalRef}>
         <button
           type="button"
           className="movie-modal__close"
           onClick={onClose}
-          aria-label="Close movie details"
+          aria-label="Close"
         >
-          ×
+          <CloseIcon width={20} height={20} />
         </button>
 
         {loadingDetails && (
-          <div className="movie-modal__status" role="status">
-            Loading movie details…
+          <div className="movie-modal__skeleton" aria-busy="true">
+            <div className="movie-modal__skel-backdrop" />
+            <div className="movie-modal__body">
+              <div className="skeleton-line skeleton-line--title" />
+              <div className="skeleton-line skeleton-line--meta" />
+              <div className="skeleton-line skeleton-line--meta" />
+            </div>
           </div>
         )}
 
         {error && !loadingDetails && (
           <div className="movie-modal__status movie-modal__status--error" role="alert">
-            <p>We couldn't load this movie's details.</p>
+            <p className="movie-modal__error-title">Could not load this movie</p>
             <p className="movie-modal__error-detail">{error}</p>
           </div>
         )}
@@ -154,15 +212,27 @@ const MovieModal = ({ movieId, onClose }) => {
               <h2 id="movie-modal-title" className="movie-modal__title">
                 {details.title}
               </h2>
+              {details.tagline && (
+                <p className="movie-modal__tagline">{details.tagline}</p>
+              )}
               <ul className="movie-modal__meta">
                 {formatReleaseDate(details.release_date) && (
-                  <li>📅 {formatReleaseDate(details.release_date)}</li>
+                  <li>
+                    <CalendarIcon width={14} height={14} />
+                    <span>{formatReleaseDate(details.release_date)}</span>
+                  </li>
                 )}
                 {formatRuntime(details.runtime) && (
-                  <li>⏱ {formatRuntime(details.runtime)}</li>
+                  <li>
+                    <ClockIcon width={14} height={14} />
+                    <span>{formatRuntime(details.runtime)}</span>
+                  </li>
                 )}
                 {typeof details.vote_average === 'number' && (
-                  <li>⭐ {details.vote_average.toFixed(1)}</li>
+                  <li>
+                    <StarIcon filled width={14} height={14} />
+                    <span>{details.vote_average.toFixed(1)}</span>
+                  </li>
                 )}
               </ul>
               {details.genres && details.genres.length > 0 && (
@@ -196,15 +266,17 @@ const MovieModal = ({ movieId, onClose }) => {
               )}
               {(loadingInsight || aiInsight) && (
                 <section className="movie-modal__section movie-modal__ai">
-                  <h3 className="movie-modal__section-heading">
-                    ✨ AI Watch Recommendation
+                  <h3 className="movie-modal__section-heading movie-modal__ai-heading">
+                    <SparklesIcon width={14} height={14} />
+                    AI take
                   </h3>
-                  {loadingInsight && (
-                    <p className="movie-modal__ai-loading" role="status">
-                      ✨ Getting a recommendation…
-                    </p>
-                  )}
-                  {!loadingInsight && aiInsight && (
+                  {loadingInsight ? (
+                    <div className="movie-modal__ai-skeleton" aria-busy="true">
+                      <div className="skeleton-line skeleton-line--title" />
+                      <div className="skeleton-line skeleton-line--title" />
+                      <div className="skeleton-line skeleton-line--meta" />
+                    </div>
+                  ) : (
                     <p className="movie-modal__ai-text">{aiInsight}</p>
                   )}
                 </section>

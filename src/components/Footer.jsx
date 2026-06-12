@@ -1,21 +1,21 @@
 import './Footer.css'
 
 const Footer = () => {
-  const year = new Date().getFullYear()
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
-        <p>© {year} Flixster. Built for the CodePath SITE Flixster project.</p>
-        <p>
-          Movie data provided by{' '}
+        <p className="site-footer__line">
+          Movie data from{' '}
           <a
             href="https://www.themoviedb.org/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            The Movie Database (TMDb)
+            The Movie Database
           </a>
-          .
+        </p>
+        <p className="site-footer__line site-footer__line--dim">
+          Built with React and TMDb. Not endorsed by TMDb.
         </p>
       </div>
     </footer>

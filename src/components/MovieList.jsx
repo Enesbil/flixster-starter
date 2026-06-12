@@ -1,6 +1,24 @@
 import MovieCard from './MovieCard'
 import './MovieList.css'
 
+const SKELETON_COUNT = 12
+
+const MovieListSkeleton = () => (
+  <ul className="movie-list__grid" aria-hidden="true">
+    {Array.from({ length: SKELETON_COUNT }, (_, i) => (
+      <li key={i} className="movie-list__item">
+        <div className="movie-card movie-card--skeleton">
+          <div className="movie-card__poster-wrap" />
+          <div className="movie-card__body">
+            <div className="skeleton-line skeleton-line--title" />
+            <div className="skeleton-line skeleton-line--meta" />
+          </div>
+        </div>
+      </li>
+    ))}
+  </ul>
+)
+
 const MovieList = ({
   movies,
   onCardClick,
@@ -25,9 +43,9 @@ const MovieList = ({
 
   if (isLoading && movies.length === 0) {
     return (
-      <div className="movie-list__message" role="status">
-        <p>Loading movies…</p>
-      </div>
+      <section className="movie-list" aria-label="Loading movies" aria-busy="true">
+        <MovieListSkeleton />
+      </section>
     )
   }
 
@@ -71,7 +89,7 @@ const MovieList = ({
             onClick={onLoadMore}
             disabled={isLoadingMore}
           >
-            {isLoadingMore ? 'Loading…' : 'Load More'}
+            {isLoadingMore ? 'Loading' : 'Load more'}
           </button>
         </div>
       )}

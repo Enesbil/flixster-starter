@@ -1,9 +1,10 @@
+import { FilmIcon, HeartIcon, EyeIcon } from './Icons'
 import './Sidebar.css'
 
 const FILTERS = [
-  { value: 'all', label: 'All Movies' },
-  { value: 'favorites', label: '❤️ Favorites' },
-  { value: 'watched', label: '✅ Watched' },
+  { value: 'all', label: 'All movies', Icon: FilmIcon },
+  { value: 'favorites', label: 'Favorites', Icon: HeartIcon },
+  { value: 'watched', label: 'Watched', Icon: EyeIcon },
 ]
 
 const Sidebar = ({
@@ -22,28 +23,30 @@ const Sidebar = ({
     .filter(Boolean)
 
   return (
-    <aside className="sidebar" aria-label="Filters and lists">
+    <aside className="sidebar" aria-label="Filters and saved lists">
       <section className="sidebar__section">
         <h3 className="sidebar__heading">Filter</h3>
         <ul className="sidebar__filter-list">
-          {FILTERS.map((f) => {
+          {FILTERS.map(({ value, label, Icon }) => {
             const count =
-              f.value === 'favorites'
+              value === 'favorites'
                 ? favorites.size
-                : f.value === 'watched'
+                : value === 'watched'
                   ? watched.size
                   : null
+            const isActive = filter === value
             return (
-              <li key={f.value}>
+              <li key={value}>
                 <button
                   type="button"
-                  className={`sidebar__filter${
-                    filter === f.value ? ' sidebar__filter--active' : ''
-                  }`}
-                  onClick={() => onFilterChange(f.value)}
-                  aria-pressed={filter === f.value}
+                  className={`sidebar__filter${isActive ? ' is-active' : ''}`}
+                  onClick={() => onFilterChange(value)}
+                  aria-pressed={isActive}
                 >
-                  <span>{f.label}</span>
+                  <span className="sidebar__filter-left">
+                    <Icon width={16} height={16} />
+                    <span>{label}</span>
+                  </span>
                   {count !== null && (
                     <span className="sidebar__count">{count}</span>
                   )}
@@ -55,9 +58,9 @@ const Sidebar = ({
       </section>
 
       <section className="sidebar__section">
-        <h3 className="sidebar__heading">❤️ Favorites</h3>
+        <h3 className="sidebar__heading">Favorites</h3>
         {favoriteMovies.length === 0 ? (
-          <p className="sidebar__empty">No favorites yet.</p>
+          <p className="sidebar__empty">Tap the heart on any card.</p>
         ) : (
           <ul className="sidebar__list">
             {favoriteMovies.map((m) => (
@@ -76,9 +79,9 @@ const Sidebar = ({
       </section>
 
       <section className="sidebar__section">
-        <h3 className="sidebar__heading">✅ Watched</h3>
+        <h3 className="sidebar__heading">Watched</h3>
         {watchedMovies.length === 0 ? (
-          <p className="sidebar__empty">Nothing watched yet.</p>
+          <p className="sidebar__empty">Mark movies you have seen.</p>
         ) : (
           <ul className="sidebar__list">
             {watchedMovies.map((m) => (

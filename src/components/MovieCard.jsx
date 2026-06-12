@@ -1,14 +1,15 @@
 import { POSTER_BASE } from '../api/tmdb'
+import { HeartIcon, EyeIcon, StarIcon, CheckIcon } from './Icons'
 import './MovieCard.css'
 
 const FALLBACK_POSTER =
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 450">
-      <rect width="300" height="450" fill="#1a1d26"/>
-      <text x="50%" y="50%" fill="#7a8090" font-family="Arial, sans-serif"
-            font-size="20" text-anchor="middle" dominant-baseline="middle">
-        No poster available
+      <rect width="300" height="450" fill="#141416"/>
+      <text x="50%" y="50%" fill="#64748b" font-family="Inter, sans-serif"
+            font-size="16" text-anchor="middle" dominant-baseline="middle">
+        No poster
       </text>
     </svg>`
   )
@@ -28,7 +29,7 @@ const MovieCard = ({
   const voteDisplay =
     typeof movie.vote_average === 'number'
       ? movie.vote_average.toFixed(1)
-      : '—'
+      : null
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -37,15 +38,15 @@ const MovieCard = ({
     }
   }
 
-  const handleActionClick = (event, fn) => {
+  const handleAction = (event, fn) => {
     event.stopPropagation()
     fn(movie.id)
   }
 
   const classes = [
     'movie-card',
-    isFavorite ? 'movie-card--favorite' : '',
-    isWatched ? 'movie-card--watched' : '',
+    isFavorite ? 'is-favorite' : '',
+    isWatched ? 'is-watched' : '',
   ]
     .filter(Boolean)
     .join(' ')
@@ -66,24 +67,26 @@ const MovieCard = ({
           className="movie-card__poster"
           loading="lazy"
         />
-        <span className="movie-card__rating" aria-label={`Vote average ${voteDisplay} out of 10`}>
-          ⭐ {voteDisplay}
-        </span>
-        {isWatched && (
-          <span className="movie-card__watched-badge" aria-hidden="true">
-            ✅ Watched
+        {voteDisplay && (
+          <span
+            className="movie-card__rating"
+            aria-label={`Rated ${voteDisplay} out of 10`}
+          >
+            <StarIcon filled width={12} height={12} />
+            {voteDisplay}
           </span>
         )}
-      </div>
-      <div className="movie-card__body">
-        <h3 className="movie-card__title">{movie.title}</h3>
+        {isWatched && (
+          <span className="movie-card__watched-pill" aria-hidden="true">
+            <CheckIcon width={12} height={12} />
+            Watched
+          </span>
+        )}
         <div className="movie-card__actions">
           <button
             type="button"
-            className={`movie-card__action${
-              isFavorite ? ' movie-card__action--active-fav' : ''
-            }`}
-            onClick={(event) => handleActionClick(event, onToggleFavorite)}
+            className={`movie-card__action${isFavorite ? ' is-active-fav' : ''}`}
+            onClick={(event) => handleAction(event, onToggleFavorite)}
             aria-label={
               isFavorite
                 ? `Remove ${movie.title} from favorites`
@@ -91,14 +94,12 @@ const MovieCard = ({
             }
             aria-pressed={isFavorite}
           >
-            {isFavorite ? '❤️' : '🤍'}
+            <HeartIcon filled={isFavorite} />
           </button>
           <button
             type="button"
-            className={`movie-card__action${
-              isWatched ? ' movie-card__action--active-watched' : ''
-            }`}
-            onClick={(event) => handleActionClick(event, onToggleWatched)}
+            className={`movie-card__action${isWatched ? ' is-active-watched' : ''}`}
+            onClick={(event) => handleAction(event, onToggleWatched)}
             aria-label={
               isWatched
                 ? `Mark ${movie.title} as not watched`
@@ -106,9 +107,17 @@ const MovieCard = ({
             }
             aria-pressed={isWatched}
           >
-            {isWatched ? '✅' : '👁'}
+            {isWatched ? <CheckIcon /> : <EyeIcon />}
           </button>
         </div>
+      </div>
+      <div className="movie-card__body">
+        <h3 className="movie-card__title">{movie.title}</h3>
+        {movie.release_date && (
+          <p className="movie-card__year">
+            {movie.release_date.slice(0, 4)}
+          </p>
+        )}
       </div>
     </article>
   )

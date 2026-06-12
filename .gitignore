@@ -25,6 +25,9 @@ assignment_instructions.md
 planning.md
 DEPLOY.md
 
+# Local-only skill installation
+.claude/skills/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

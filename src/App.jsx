@@ -106,8 +106,8 @@ const App = () => {
       } catch (err) {
         setError(
           err?.message
-            ? `Couldn't load movies: ${err.message}`
-            : "Couldn't load movies. Please try again."
+            ? `Could not load movies: ${err.message}`
+            : 'Could not load movies. Please try again.'
         )
         if (!append) setMovies([])
       } finally {
@@ -186,24 +186,24 @@ const App = () => {
     filter === 'all' && movies.length > 0 && page < totalPages
   const baseHeading =
     mode === 'search'
-      ? `Search results for “${activeQuery}”`
-      : 'Now Playing'
+      ? `Results for "${activeQuery}"`
+      : 'Now playing'
   const filterSuffix =
     filter === 'favorites'
-      ? ' — Favorites'
+      ? ' / Favorites'
       : filter === 'watched'
-        ? ' — Watched'
+        ? ' / Watched'
         : ''
   const headingLabel = `${baseHeading}${filterSuffix}`
 
   const emptyMessage =
     filter === 'favorites'
-      ? "You haven't favorited any movies in this list yet."
+      ? 'No favorites in this list.'
       : filter === 'watched'
-        ? "You haven't marked any movies in this list as watched yet."
+        ? 'No watched movies in this list.'
         : mode === 'search'
-          ? `No movies found for “${activeQuery}”. Try another title.`
-          : 'No movies are playing right now.'
+          ? `No results for "${activeQuery}".`
+          : 'Nothing playing right now.'
 
   return (
     <div className="App">
@@ -238,7 +238,7 @@ const App = () => {
                   className="App__pill-button"
                   onClick={handleHomeClick}
                 >
-                  Back to Now Playing
+                  Back to now playing
                 </button>
               )}
             </div>

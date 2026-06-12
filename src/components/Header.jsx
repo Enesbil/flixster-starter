@@ -1,3 +1,4 @@
+import { FilmIcon } from './Icons'
 import './Header.css'
 
 const Header = ({ onHomeClick }) => {
@@ -8,12 +9,12 @@ const Header = ({ onHomeClick }) => {
           type="button"
           className="site-header__brand"
           onClick={onHomeClick}
-          aria-label="Go to Now Playing"
         >
-          <span className="site-header__logo" aria-hidden="true">🎬</span>
+          <span className="site-header__logo" aria-hidden="true">
+            <FilmIcon width={22} height={22} />
+          </span>
           <span className="site-header__title">Flixster</span>
         </button>
-        <p className="site-header__tagline">Now playing in theaters</p>
       </div>
     </header>
   )

@@ -2,14 +2,14 @@ const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
 const MODEL = 'openrouter/free'
 
 export const AI_FALLBACK_MESSAGE =
-  "We couldn't generate a recommendation for this one — check out the overview above!"
+  "Could not generate a take this time. Try opening the movie again in a moment."
 
-const SYSTEM_PROMPT = `You are an enthusiastic but honest film critic giving brief watch recommendations.
-Write 2 to 3 sentences telling the reader who this movie is for and what kind of mood or evening it suits.
-Use second person ("you"), never first person ("I").
-No spoilers beyond what is given in the overview.
-No bullet points, no markdown, no headings — plain prose only.
-Avoid generic phrases like "must-see", "instant classic", or "you won't want to miss it".`
+const SYSTEM_PROMPT = `You are a film critic writing 2 to 3 sentence watch recommendations.
+Tell the reader who this movie is for and what kind of evening it fits.
+Use second person ("you"). Never use first person ("I").
+No spoilers past the overview. No markdown, no bullet points, no headings.
+Avoid filler like "must-see", "instant classic", or "you won't want to miss it".
+Write plain prose. Be specific.`
 
 const buildUserPrompt = ({ title, genres, overview }) => {
   const safeGenres = genres && genres.length > 0 ? genres : 'Unspecified'
@@ -18,7 +18,7 @@ const buildUserPrompt = ({ title, genres, overview }) => {
 Genres: ${safeGenres}
 Overview: ${safeOverview}
 
-Write the watch recommendation now.`
+Write the recommendation now.`
 }
 
 export const getMovieInsight = async ({ title, genres, overview }) => {
