@@ -3,6 +3,8 @@
 Submitted by: **Muhammed Enes Bilek**
 
 Estimated time spent: **~8** hours spent in total
+loom vid https://www.loom.com/share/e9c6b5ece5e74119b08e9f311db74b93
+render link https://flixster-cmgk.onrender.com/
 
 ### Application Features
 
@@ -98,7 +100,7 @@ Estimated time spent: **~8** hours spent in total
 
 `TODO://` add the Loom link before submission.
 
-**Walkthrough video:** [Flixster Walkthrough](ADD_LOOM_LINK_HERE)
+**Walkthrough video:** [Flixster Walkthrough](https://www.loom.com/share/e9c6b5ece5e74119b08e9f311db74b93)
 
 ### Reflection
 
