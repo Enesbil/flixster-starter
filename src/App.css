@@ -1,28 +1,91 @@
 .App {
-  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0b0d12;
+  color: #f5f5f5;
 }
 
-.App-header {
-  background-color: #282c34;
+.App__main {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 3rem;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.App__controls {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.App__layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.App__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .App__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.App__heading-row {
+  display: flex;
   align-items: center;
-  justify-content: space-evenly;
-  color: white;
-  padding: 20px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.App__heading {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.01em;
+}
+
+.App__pill-button {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: transparent;
+  color: #ffd166;
+  border: 1px solid #ffd166;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.App__pill-button:hover,
+.App__pill-button:focus-visible {
+  background: #ffd166;
+  color: #14171f;
+  outline: none;
+}
+
+.App__pill-button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 @media (max-width: 600px) {
-  .movie-card {
-    width: 100%;
+  .App__main {
+    padding: 1rem 1rem 2.5rem;
   }
-
-  .search-bar {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .search-bar form {
-    flex-direction: column;
+  .App__heading {
+    font-size: 1.25rem;
   }
 }

@@ -1,0 +1,82 @@
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1 1 320px;
+  min-width: 220px;
+}
+
+.search-bar__label {
+  font-size: 0.85rem;
+  color: #b3b8c4;
+  font-weight: 600;
+}
+
+.search-bar__row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.search-bar__input {
+  flex: 1 1 200px;
+  padding: 0.65rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #2c303a;
+  background: #1a1d26;
+  color: #f5f5f5;
+  font-size: 1rem;
+}
+
+.search-bar__input:focus-visible {
+  outline: 2px solid #ffd166;
+  outline-offset: 1px;
+  border-color: #ffd166;
+}
+
+.search-bar__input::placeholder {
+  color: #7a8090;
+}
+
+.search-bar__button {
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  border: 0;
+  background: #ffd166;
+  color: #14171f;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.05s ease;
+}
+
+.search-bar__button:hover {
+  background: #ffdf91;
+}
+
+.search-bar__button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.search-bar__button:active {
+  transform: translateY(1px);
+}
+
+.search-bar__button--secondary {
+  background: #2c303a;
+  color: #f5f5f5;
+}
+
+.search-bar__button--secondary:hover {
+  background: #3a3f4d;
+}
+
+@media (max-width: 600px) {
+  .search-bar__row {
+    flex-direction: column;
+  }
+  .search-bar__button {
+    width: 100%;
+  }
+}

@@ -12,6 +12,19 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Local notes containing secrets
+api_info.md
+
+# Local planning/assignment docs (not for sharing)
+assignment_instructions.md
+planning.md
+DEPLOY.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

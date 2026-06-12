@@ -1,0 +1,27 @@
+.site-footer {
+  background: #0b0d12;
+  color: #b3b8c4;
+  border-top: 1px solid #23262f;
+  margin-top: 3rem;
+}
+
+.site-footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.site-footer__inner a {
+  color: #ffd166;
+  text-decoration: none;
+}
+
+.site-footer__inner a:hover,
+.site-footer__inner a:focus-visible {
+  text-decoration: underline;
+}
