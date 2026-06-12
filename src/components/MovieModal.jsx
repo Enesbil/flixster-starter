@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+
+const insightCache = new Map()
 import {
   fetchMovieDetails,
   BACKDROP_BASE,
@@ -81,6 +83,12 @@ const MovieModal = ({ movieId, onClose }) => {
 
   useEffect(() => {
     if (!details) return
+    const cached = insightCache.get(details.id)
+    if (cached) {
+      setAiInsight(cached)
+      setLoadingInsight(false)
+      return
+    }
     let cancelled = false
     setLoadingInsight(true)
     setAiInsight(null)
@@ -91,6 +99,7 @@ const MovieModal = ({ movieId, onClose }) => {
     })
       .then((text) => {
         if (cancelled) return
+        insightCache.set(details.id, text)
         setAiInsight(text)
       })
       .finally(() => {
@@ -142,8 +151,9 @@ const MovieModal = ({ movieId, onClose }) => {
     return () => {
       window.removeEventListener('keydown', handleKey)
       document.body.style.overflow = previousOverflow
-      if (previouslyFocused.current instanceof HTMLElement) {
-        previouslyFocused.current.focus()
+      const prev = previouslyFocused.current
+      if (prev instanceof HTMLElement && prev.isConnected) {
+        prev.focus()
       }
     }
   }, [onClose])

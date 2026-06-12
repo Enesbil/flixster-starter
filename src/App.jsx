@@ -207,8 +207,10 @@ const App = () => {
 
   return (
     <div className="App">
+      <a className="skip-link" href="#main">Skip to content</a>
+      <h1 className="sr-only">Flixster</h1>
       <Header onHomeClick={handleHomeClick} />
-      <main className="App__main">
+      <main id="main" className="App__main" tabIndex={-1}>
         <div className="App__controls">
           <SearchBar
             query={queryInput}
